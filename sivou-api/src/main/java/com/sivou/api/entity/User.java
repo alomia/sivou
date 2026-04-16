@@ -19,11 +19,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "doc_type", nullable = false)
-    private String docType;
+    @Column(name = "document_type", nullable = false)
+    private String documentType;
 
-    @Column(name = "doc_number", nullable = false, unique = true)
-    private String docNumber;
+    @Column(name = "document_number", nullable = false, unique = true)
+    private String documentNumber;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -34,11 +34,11 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
-    private String password;
+    @Column(name = "password_hash", nullable = false)
+    private String passwordHash;
 
     @Column(nullable = false)
-    private String status;
+    private boolean active = true;
 
     @Column(name = "updated_at")
     @UpdateTimestamp
