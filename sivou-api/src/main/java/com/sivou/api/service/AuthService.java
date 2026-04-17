@@ -2,9 +2,12 @@ package com.sivou.api.service;
 
 import com.sivou.api.dto.AuthResponse;
 import com.sivou.api.dto.RegisterRequest;
+import com.sivou.api.entity.Role;
 import com.sivou.api.entity.User;
 import com.sivou.api.mapper.UserMapper;
+import com.sivou.api.repository.RoleRepository;
 import com.sivou.api.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,9 +17,11 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     public AuthResponse register(RegisterRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -29,6 +34,11 @@ public class AuthService {
 
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         User user = userMapper.toEntity(request, encodedPassword);
+
+        Role votanteRole = roleRepository.findByName("ROLE_VOTANTE")
+                .orElseThrow(() -> new RuntimeException("Error: El rol ROLE_VOTANTE no está inicializado en la base de datos"));
+
+        user.getRoles().add(votanteRole);
         userRepository.save(user);
 
         return new AuthResponse(
