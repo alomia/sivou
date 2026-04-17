@@ -1,4 +1,4 @@
-package com.sivou.api.entities;
+package com.sivou.api.entity;
 
 import com.sivou.api.enums.RoleName;
 import jakarta.persistence.*;
@@ -20,6 +20,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = true)
     private RoleName name;
 

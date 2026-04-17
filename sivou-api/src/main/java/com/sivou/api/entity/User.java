@@ -1,4 +1,4 @@
-package com.sivou.api.entities;
+package com.sivou.api.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -23,28 +23,21 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @NotBlank
     @Column(name = "document_type", nullable = false)
     private String documentType;
 
-    @NotBlank
     @Column(name = "document_number", nullable = false, unique = true)
     private String documentNumber;
 
-    @NotBlank
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @NotBlank
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Email
-    @NotBlank
     @Column(nullable = false, unique = true)
     private String email;
 
-    @NotBlank
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 

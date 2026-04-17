@@ -1,6 +1,8 @@
 package com.sivou.api.controller;
 
 import com.sivou.api.dto.AuthResponse;
+import com.sivou.api.dto.ChangePasswordRequest;
+import com.sivou.api.dto.LoginRequest;
 import com.sivou.api.dto.RegisterRequest;
 import com.sivou.api.service.AuthService;
 import jakarta.validation.Valid;
@@ -18,7 +20,17 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
-        AuthResponse response = service.register(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.register(request));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
+        return ResponseEntity.ok(service.login(request));
+    }
+
+    @PutMapping("/change-password")
+    public ResponseEntity<Void> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
+        service.changePassword(request);
+        return ResponseEntity.noContent().build();
     }
 }
