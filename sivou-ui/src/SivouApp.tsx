@@ -1,11 +1,8 @@
-import { Toaster } from "sonner"
-import { AppRouter } from "./AppRouter"
+import { RouterProvider } from "react-router"
+import { appRouter } from "./app.router"
 
 export const SivouApp = () => {
   return (
-    <>
-      <Toaster position="bottom-right" richColors />
-      <AppRouter />
-    </>
+    <RouterProvider router={appRouter} />
   )
 }
