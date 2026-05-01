@@ -1,11 +1,16 @@
-import { Toaster } from "sonner"
-import { AppRouter } from "./AppRouter"
+import { RouterProvider } from "react-router"
+import { appRouter } from "./app.router"
+
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+
+const queryClient = new QueryClient()
 
 export const SivouApp = () => {
   return (
-    <>
-      <Toaster position="bottom-right" richColors />
-      <AppRouter />
-    </>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={appRouter} />
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   )
 }

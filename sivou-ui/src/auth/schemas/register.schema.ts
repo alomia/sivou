@@ -15,9 +15,7 @@ export const registerSchema = z.object({
     .min(1, "El apellido es obligatorio")
     .max(100, "El apellido no puede superar los 100 caracteres"),
 
-  email: z.string()
-    .min(1, "El correo electrónico es obligatorio")
-    .email("El formato del correo institucional es inválido"),
+  email: z.email("El formato del correo institucional es inválido"),
 
   password: z.string()
     .min(1, "La contraseña es obligatoria")
