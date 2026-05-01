@@ -1,4 +1,4 @@
-import { Box, Container, Flex, Section, Text } from "@radix-ui/themes"
+import { Box, Container, Flex, Text } from "@radix-ui/themes"
 import { Outlet } from "react-router"
 
 const AuthLayout = () => {
