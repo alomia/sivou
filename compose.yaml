@@ -1,0 +1,15 @@
+services:
+  sivou-db:
+    image: postgres:16-bookworm
+    container_name: sivou-db
+    environment:
+      POSTGRES_DB: sivoudb
+      POSTGRES_USER: sivouadmin
+      POSTGRES_PASSWORD: p4ssw0rd
+    ports:
+      - "5432:5432"
+    volumes:
+      - sivou-db-data:/var/lib/postgresql/data
+
+volumes:
+  sivou-db-data:

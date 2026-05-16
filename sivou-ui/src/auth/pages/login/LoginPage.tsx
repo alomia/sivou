@@ -10,7 +10,7 @@ import { EnvelopeClosedIcon, ExclamationTriangleIcon, EyeClosedIcon, EyeOpenIcon
 import { AuthHeader } from "../../components/AuthHeader"
 import { FormField } from "../../components/FormField"
 import { loginSchema, type LoginFormData } from "../../schemas/login.schema"
-import { loginAction } from "../../actions/login.action"
+import { useAuthStore } from "../../store/auth.store"
 
 export const LoginPage = () => {
   const navigate = useNavigate();
@@ -21,23 +21,27 @@ export const LoginPage = () => {
     resolver: zodResolver(loginSchema)
   })
 
+  const { login } = useAuthStore();
+
 
   const emailValue = watch("email")
   const passwordValue = watch("password")
   const isFormEmpty = !emailValue || !passwordValue
 
   const handleLogin = async (formData: LoginFormData) => {
-    try {
-      setIsLoading(true)
-      setServerError(null)
-      const data = await loginAction(formData)
-      localStorage.setItem('token', data.token)
+    setIsLoading(true)
+    setServerError(null)
+
+    const isSucces = await login(formData.email, formData.password)
+
+    if (isSucces) {
       navigate('/')
-    } catch (error) {
-      setServerError("Correo o contraseña incorrectos")
-    } finally {
-      setIsLoading(false)
+      return
     }
+
+    setServerError("Correo o contraseña incorrectos")
+    setIsLoading(false)
+
   }
 
   return (

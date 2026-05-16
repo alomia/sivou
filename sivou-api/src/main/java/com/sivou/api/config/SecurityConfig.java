@@ -3,6 +3,7 @@ package com.sivou.api.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -45,7 +46,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:5173"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
         return source -> configuration;
@@ -64,11 +65,51 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .authorizeHttpRequests(request ->
-                        request
-                                .requestMatchers("/auth/**").permitAll()
-                                .requestMatchers("/h2-console/**").permitAll()
-                                .anyRequest().authenticated()
+                .authorizeHttpRequests(req -> req
+
+                        // — Auth: público —
+                        .requestMatchers("/auth/login", "/auth/register").permitAll()
+
+                        // — Auth: gestión de roles → solo ADMIN —
+                        .requestMatchers(HttpMethod.PATCH, "/auth/users/*/roles").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET,   "/auth/users").hasAuthority("ROLE_ADMIN")
+
+                        // — Auth: endpoints autenticados —
+                        .requestMatchers("/auth/**").authenticated()
+
+                        // — Elecciones: lectura → cualquier autenticado —
+                        .requestMatchers(HttpMethod.GET, "/elections").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/elections/*").authenticated()
+
+                        // — Elecciones: escritura → ADMIN o SEC_GRAL —
+                        .requestMatchers(HttpMethod.POST,  "/elections").hasAnyAuthority("ROLE_ADMIN", "ROLE_SEC_GRAL")
+                        .requestMatchers(HttpMethod.PATCH, "/elections/*/status").hasAnyAuthority("ROLE_ADMIN", "ROLE_SEC_GRAL")
+
+                        // — Candidaturas: registrar → autenticado (cualquier usuario) —
+                        .requestMatchers(HttpMethod.POST, "/elections/*/candidacies").authenticated()
+
+                        // — Candidaturas: listar → autenticado —
+                        .requestMatchers(HttpMethod.GET, "/elections/*/candidacies").authenticated()
+
+                        // — Candidaturas: aprobar/rechazar → ADMIN o SEC_GRAL —
+                        .requestMatchers(HttpMethod.PATCH, "/elections/*/candidacies/*/review").hasAnyAuthority("ROLE_ADMIN", "ROLE_SEC_GRAL")
+
+                        // — Tarjetón: cualquier autenticado —
+                        .requestMatchers(HttpMethod.GET, "/elections/*/ballot").authenticated()
+
+                        // — Votación: solo ROLE_VOTANTE —
+                        .requestMatchers(HttpMethod.POST, "/elections/*/vote").hasAuthority("ROLE_VOTANTE")
+                        .requestMatchers(HttpMethod.GET,  "/elections/*/has-voted").hasAuthority("ROLE_VOTANTE")
+
+                        // — Resultados: consolidar y publicar → ADMIN o SEC_GRAL —
+                        .requestMatchers(HttpMethod.POST, "/elections/*/results/consolidate").hasAnyAuthority("ROLE_ADMIN", "ROLE_SEC_GRAL")
+                        .requestMatchers(HttpMethod.POST, "/elections/*/results/publish").hasAnyAuthority("ROLE_ADMIN", "ROLE_SEC_GRAL")
+
+                        // — Resultados: ver → cualquier autenticado —
+                        .requestMatchers(HttpMethod.GET, "/elections/*/results").authenticated()
+
+                        // — Cualquier otra cosa → autenticado —
+                        .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

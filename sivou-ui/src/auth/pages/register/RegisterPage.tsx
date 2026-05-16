@@ -1,47 +1,53 @@
 import { useState } from "react"
-
 import { Link as RouterLink, useNavigate } from "react-router"
 import { ExclamationTriangleIcon, EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons"
 import { Box, Card, Flex, Separator, Button, Link, Text, Grid, Select, Heading, IconButton, Callout, Spinner } from "@radix-ui/themes"
+import { Controller, useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 import { FormField } from "../../components/FormField"
-import { Controller, useForm } from "react-hook-form"
 import { registerSchema, type RegisterFormData } from "../../schemas/register.schema"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { registerAction } from "../../actions/register.action"
+import { useAuthStore } from "../../store/auth.store"
 
 export const RegisterPage = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+  const { register: registerUser } = useAuthStore()
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [serverError, setServerError] = useState<string | null>(null)
+
   const { control, register, handleSubmit, formState: { errors }, watch } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema)
   })
 
-  const isFormEmpty = !watch("email") || !watch("password") || !watch("confirmPassword") || !watch("firstName") || !watch("lastName") || !watch("documentNumber")
+  const isFormEmpty =
+    !watch("email") ||
+    !watch("password") ||
+    !watch("confirmPassword") ||
+    !watch("firstName") ||
+    !watch("lastName") ||
+    !watch("documentNumber")
 
   const handleRegister = async (formData: RegisterFormData) => {
-    try {
-      setIsLoading(true)
-      setServerError(null)
-      const data = await registerAction(formData)
-      localStorage.setItem('token', data.token)
-      navigate('/auth/login')
-    } catch (error) {
-      setServerError("Error al crear la cuenta")
-    } finally {
-      setIsLoading(false)
+    setIsLoading(true)
+    setServerError(null)
+
+    const success = await registerUser(formData)
+
+    if (success) {
+      navigate('/')
+      return
     }
+
+    setServerError("Error al crear la cuenta. Verifica que el correo y documento no estén registrados.")
+    setIsLoading(false)
   }
 
   return (
     <Box width="700px">
-
       <Card size="4">
         <form onSubmit={handleSubmit(handleRegister)}>
-
           <Flex direction="column" gap="5">
             <Box>
               <Heading>Crear cuenta</Heading>
@@ -52,22 +58,18 @@ export const RegisterPage = () => {
 
             {serverError && (
               <Callout.Root color="red" variant="surface">
-                <Callout.Icon>
-                  <ExclamationTriangleIcon />
-                </Callout.Icon>
+                <Callout.Icon><ExclamationTriangleIcon /></Callout.Icon>
                 <Callout.Text>{serverError}</Callout.Text>
               </Callout.Root>
             )}
 
             <Flex direction="column" gap="5">
-
-              <Grid columns="2" gapY="4" gapX="3" >
+              <Grid columns="2" gapY="4" gapX="3">
 
                 <Flex direction="column" gap="2">
                   <Text as="label" weight="medium">Tipo de documento</Text>
-
                   <Controller
-                    name="documentType"   // ← falta el name
+                    name="documentType"
                     control={control}
                     defaultValue="CC"
                     render={({ field }) => (
@@ -82,7 +84,6 @@ export const RegisterPage = () => {
                     )}
                   />
                 </Flex>
-
 
                 <FormField
                   label="Número de documento"
@@ -122,12 +123,7 @@ export const RegisterPage = () => {
                   placeholder="Mínimo 8 caracteres"
                   type={showPassword ? "text" : "password"}
                   rightSlot={
-                    <IconButton
-                      onClick={() => setShowPassword(!showPassword)}
-                      size="2"
-                      type="button"
-                      variant="ghost"
-                      color="gray">
+                    <IconButton onClick={() => setShowPassword(!showPassword)} size="2" type="button" variant="ghost" color="gray">
                       {showPassword ? <EyeClosedIcon /> : <EyeOpenIcon height="16" width="16" />}
                     </IconButton>
                   }
@@ -140,19 +136,13 @@ export const RegisterPage = () => {
                   placeholder="Repite tu contraseña"
                   type={showConfirmPassword ? "text" : "password"}
                   rightSlot={
-                    <IconButton
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      size="2"
-                      type="button"
-                      variant="ghost"
-                      color="gray">
+                    <IconButton onClick={() => setShowConfirmPassword(!showConfirmPassword)} size="2" type="button" variant="ghost" color="gray">
                       {showConfirmPassword ? <EyeClosedIcon /> : <EyeOpenIcon height="16" width="16" />}
                     </IconButton>
                   }
                   error={errors.confirmPassword?.message}
                   {...register("confirmPassword")}
                 />
-
               </Grid>
 
               <Button style={{ cursor: 'pointer' }} size="3" type="submit" disabled={isFormEmpty || isLoading}>
@@ -164,11 +154,7 @@ export const RegisterPage = () => {
             <Flex direction="column" align="center" gap="2">
               <Text size="2" color="gray">
                 ¿Ya tienes cuenta?{" "}
-                <Link asChild
-                  color="indigo"
-                  size="2"
-                  weight="medium"
-                  underline="none">
+                <Link asChild color="indigo" size="2" weight="medium" underline="none">
                   <RouterLink to="/auth/login">Inicia sesión</RouterLink>
                 </Link>
               </Text>

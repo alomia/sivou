@@ -1,0 +1,8 @@
+.trigger {
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.trigger:hover {
+    background-color: var(--gray-a3);
+}
