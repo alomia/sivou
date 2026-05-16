@@ -1,7 +1,7 @@
-package com.sivou.api.mapper;
+package com.sivou.api.auth.mapper;
 
-import com.sivou.api.dto.RegisterRequest;
-import com.sivou.api.entity.User;
+import com.sivou.api.auth.dto.RegisterRequest;
+import com.sivou.api.auth.entity.User;
 import org.springframework.stereotype.Component;
 
 @Component

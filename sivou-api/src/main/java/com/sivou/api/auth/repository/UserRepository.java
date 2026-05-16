@@ -1,6 +1,6 @@
-package com.sivou.api.repository;
+package com.sivou.api.auth.repository;
 
-import com.sivou.api.entity.User;
+import com.sivou.api.auth.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
-package com.sivou.api.repository;
+package com.sivou.api.auth.repository;
 
-import com.sivou.api.entity.Role;
-import com.sivou.api.enums.RoleName;
+import com.sivou.api.auth.entity.Role;
+import com.sivou.api.auth.enums.RoleName;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

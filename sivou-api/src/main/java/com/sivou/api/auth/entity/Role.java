@@ -1,6 +1,6 @@
-package com.sivou.api.entity;
+package com.sivou.api.auth.entity;
 
-import com.sivou.api.enums.RoleName;
+import com.sivou.api.auth.enums.RoleName;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

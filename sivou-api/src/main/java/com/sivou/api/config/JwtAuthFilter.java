@@ -1,6 +1,6 @@
 package com.sivou.api.config;
 
-import com.sivou.api.service.JwtService;
+import com.sivou.api.auth.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

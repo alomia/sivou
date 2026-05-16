@@ -1,6 +1,6 @@
-package com.sivou.api.service;
+package com.sivou.api.auth.service;
 
-import com.sivou.api.entity.User;
+import com.sivou.api.auth.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

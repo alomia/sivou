@@ -1,4 +1,4 @@
-package com.sivou.api.dto;
+package com.sivou.api.auth.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
