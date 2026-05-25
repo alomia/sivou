@@ -1,6 +1,6 @@
-import { Navigate, Outlet } from "react-router"
-import { Navbar } from "../components/Navbar"
-import { useAuthStore } from "../../auth/store/auth.store"
+import { Navigate, Outlet } from 'react-router'
+import { useAuthStore } from '../../auth/store/auth.store'
+import { Sidebar } from '../components/Sidebar'
 
 export const DashboardLayout = () => {
   const { status } = useAuthStore()
@@ -9,15 +9,20 @@ export const DashboardLayout = () => {
     return <Navigate to="/auth/login" replace />
   }
 
-  // Mientras verifica el token no muestra nada (evita flash de contenido)
   if (status === 'checking') {
-    return null
+    return (
+      <div className="loading-screen">
+        <div className="loading-dot" />
+      </div>
+    )
   }
 
   return (
-    <>
-      <Navbar />
-      <Outlet />
-    </>
+    <div className="app-layout">
+      <Sidebar />
+      <main className="app-main">
+        <Outlet />
+      </main>
+    </div>
   )
 }
