@@ -1,34 +1,56 @@
 # SIVOU UI
 
-Frontend desarrollado con React + TypeScript + Vite.
+Frontend del sistema de votaciones de la UNIAJC.
 
 ## Stack
 - React 19
-- TypeScript
-- Vite
+- TypeScript 6
+- Vite 8
 - Radix UI Themes
-- React Router
+- React Router 7
 - React Hook Form + Zod
+- TanStack Query
+- Zustand
 - Axios
 - Sonner
 
-## Estructura
+## Requisito de Node.js
 
+**Node.js 20 LTS es obligatorio.** Versiones anteriores no son compatibles.
+
+Verificar versión actual:
 ```bash
-src/
-├── pages/        # Páginas de la app
-├── components/   # Componentes reutilizables
-├── services/     # Llamadas a la API
-├── hooks/        # Custom hooks
-├── store/        # Estado global (Zustand)
-├── types/        # Interfaces TypeScript
-├── validations/  # Schemas de Zod
-└── utils/        # Helpers
+node -v   # debe mostrar v20.x.x o superior
 ```
+
+Instalar con nvm (recomendado):
+```bash
+nvm install 20
+nvm use 20
+```
+
+Descargar directo: https://nodejs.org/en/download
 
 ## Ejecutar
 
 ```bash
 npm install
 npm run dev
+```
+
+Disponible en: http://localhost:5173
+
+El backend debe estar corriendo en http://localhost:8080 antes de usar la app.
+
+## Estructura
+
+```
+src/
+├── auth/          # Login, registro, autenticación
+├── elections/     # Gestión de elecciones
+├── candidacies/   # Gestión de candidaturas
+├── voting/        # Tarjetón y emisión de voto
+├── results/       # Resultados por elección
+├── dashboard/     # Layout y home
+└── users/         # Gestión de usuarios
 ```
