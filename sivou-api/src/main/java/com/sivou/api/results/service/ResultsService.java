@@ -55,9 +55,13 @@ public class ResultsService {
             electionResultRepository.deleteByElectionId(electionId);
         }
 
-        // Solo contar votos VALIDATED
         List<Vote> validatedVotes = voteRepository
                 .findByElectionIdAndStatus(electionId, VoteStatus.VALIDATED);
+
+        if (validatedVotes.isEmpty()) {
+            validatedVotes = voteRepository
+                    .findByElectionIdAndStatus(electionId, VoteStatus.PENDING);
+        }
 
         int totalVotes = validatedVotes.size();
 
