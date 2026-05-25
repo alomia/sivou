@@ -8,7 +8,7 @@ VALUES (
            '0000000000',
            'Admin',
            'SIVOU',
-           'admin@sivou.com',
+           'admin@uniajc.edu.co',
            '$2a$10$W4LRckJ0v7IyEe1oK2IO2ecL7kPjzVucly6KmzPvYqefXrLDNKFGO',
            true,
            CURRENT_TIMESTAMP
