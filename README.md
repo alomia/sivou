@@ -3,11 +3,12 @@
 Sistema web de votaciones electrónicas para la Universidad Antonio José Camacho (UNIAJC), Cali, Colombia.
 
 ## Repositorio
+```
 sivou/
 ├── sivou-api/   # Backend — Spring Boot 3.5 + Java 21
 ├── sivou-ui/    # Frontend — React 19 + TypeScript
 └── compose.yaml # Base de datos PostgreSQL con Docker
-
+```
 ## Requisitos mínimos
 
 | Herramienta | Versión mínima |
@@ -58,5 +59,7 @@ Disponible en: http://localhost:5173
 ## Credenciales de prueba
 
 Al arrancar el backend se crea un usuario administrador:
+```
 Email:    admin@uniajc.edu.co
 Password: Admin1234*
+```
