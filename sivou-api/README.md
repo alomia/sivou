@@ -61,5 +61,7 @@ spring.datasource.password=p4ssw0rd
 ## Autenticación
 
 Todos los endpoints protegidos requieren el header:
+```
 Authorization: Bearer <token>
+```
 El token se obtiene al hacer login o registro.
